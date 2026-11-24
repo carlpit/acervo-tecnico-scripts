@@ -1,11 +1,12 @@
 # Acervo técnico de scripts
 
-Scripts curtos de segurança, OSINT e redes, cada um em um único arquivo na raiz do repositório.
+Scripts curtos de segurança, OSINT e redes, cada um em um único arquivo na raiz do repositório, e ferramentas de engenharia civil em pastas próprias.
 
 | Script | O que faz |
 |--------|-----------|
 | [`crt_monitor.py`](#crt_monitorpy) | Busca em logs de Certificate Transparency domínios com o nome de uma marca e verifica DNS ativo |
 | [`conn_spike_watchdog.sh`](#conn_spike_watchdogsh) | Monitora picos de sockets TCP, perda de pacotes e latência em Linux, com alerta e log |
+| [`vigas-nbr6118/`](vigas-nbr6118/) | CLI que dimensiona vigas de concreto armado à flexão simples (NBR 6118) e gera memorial em Markdown |
 
 ## crt_monitor.py
 
@@ -72,6 +73,17 @@ chmod +x conn_spike_watchdog.sh
 | 3º | `80` | Alerta quando a latência média (ms) for maior ou igual a este valor |
 
 Interrompa com `Ctrl+C`. O log é criado na pasta onde o script é executado.
+
+## vigas-nbr6118/
+
+Pacote Python com CLI que dimensiona vigas retangulares de concreto armado à flexão simples pela NBR 6118: linha neutra, domínio de deformação, armadura simples ou dupla, As,mín/As,máx, sugestão de barras e memorial de cálculo em Markdown. Tem testes (pytest) e CI próprio.
+
+```bash
+cd vigas-nbr6118 && pip install -e ".[dev]"
+vigas dimensionar --b 20 --h 50 --d 45 --fck 25 --mk 100 --memorial v1.md
+```
+
+Documentação completa, normas e premissas no [README da pasta](vigas-nbr6118/README.md). Ferramenta de estudo: não substitui projeto estrutural com ART.
 
 ## Uso ético
 

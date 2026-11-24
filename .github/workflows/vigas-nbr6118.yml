@@ -1,0 +1,32 @@
+name: vigas-nbr6118
+
+on:
+  push:
+    branches: [main]
+    paths: ["vigas-nbr6118/**", ".github/workflows/vigas-nbr6118.yml"]
+  pull_request:
+    paths: ["vigas-nbr6118/**", ".github/workflows/vigas-nbr6118.yml"]
+
+defaults:
+  run:
+    working-directory: vigas-nbr6118
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Instalar
+        run: pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check .
+      - name: Testes
+        run: pytest
+      - name: Gerar memorial de exemplo
+        run: vigas dimensionar --b 20 --h 50 --d 45 --fck 25 --mk 100 --memorial memorial.md
