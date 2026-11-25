@@ -33,3 +33,52 @@ def test_cli_pasta_invalida(tmp_path: Path, capsys):
     assert code == 1
     err = capsys.readouterr().err
     assert "não é uma pasta" in err
+
+
+def test_cli_strip_exige_out(photos_dir, capsys, tmp_path: Path):
+    code = main([str(photos_dir), "--strip", "--no-report"])
+    assert code == 1
+    err = capsys.readouterr().err
+    assert "--out" in err
+
+
+def test_cli_strip_gera_copias(photos_dir, capsys, tmp_path: Path):
+    out_dir = tmp_path / "limpo"
+    md_path = tmp_path / "out.md"
+    json_path = tmp_path / "out.json"
+    code = main(
+        [
+            str(photos_dir),
+            "--strip",
+            "--out",
+            str(out_dir),
+            "--md",
+            str(md_path),
+            "--json",
+            str(json_path),
+        ]
+    )
+    assert code == 0
+    out = capsys.readouterr().out
+    assert "cópia limpa" in out
+    assert (out_dir / "com_gps.jpg").is_file()
+    from exif_guard.exif import read_exif
+
+    assert read_exif(out_dir / "com_gps.jpg").latitude is None
+    # original permanece com GPS
+    assert read_exif(photos_dir / "com_gps.jpg").latitude is not None
+
+
+def test_cli_strip_recusa_mesma_pasta(photos_dir, capsys, tmp_path: Path):
+    code = main(
+        [
+            str(photos_dir),
+            "--strip",
+            "--out",
+            str(photos_dir),
+            "--no-report",
+        ]
+    )
+    assert code == 1
+    err = capsys.readouterr().err
+    assert "mesma pasta" in err
