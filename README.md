@@ -1,12 +1,13 @@
 # Acervo técnico de scripts
 
-Scripts curtos de segurança, OSINT e redes, cada um em um único arquivo na raiz do repositório, e ferramentas de engenharia civil em pastas próprias.
+Scripts curtos de segurança, OSINT e redes, cada um em um único arquivo na raiz do repositório, e ferramentas maiores em pastas próprias.
 
 | Script | O que faz |
 |--------|-----------|
 | [`crt_monitor.py`](#crt_monitorpy) | Busca em logs de Certificate Transparency domínios com o nome de uma marca e verifica DNS ativo |
 | [`conn_spike_watchdog.sh`](#conn_spike_watchdogsh) | Monitora picos de sockets TCP, perda de pacotes e latência em Linux, com alerta e log |
 | [`vigas-nbr6118/`](vigas-nbr6118/) | CLI que dimensiona vigas de concreto armado à flexão simples (NBR 6118) e gera memorial em Markdown |
+| [`exif-guard/`](exif-guard/) | Audita EXIF de fotos próprias, calcula risco de privacidade e gera cópias sem metadados |
 
 ## crt_monitor.py
 
@@ -84,6 +85,18 @@ vigas dimensionar --b 20 --h 50 --d 45 --fck 25 --mk 100 --memorial v1.md
 ```
 
 Documentação completa, normas e premissas no [README da pasta](vigas-nbr6118/README.md). Ferramenta de estudo: não substitui projeto estrutural com ART.
+
+## exif-guard/
+
+Pacote Python com CLI que lê metadados EXIF de fotos suas (GPS em decimal + link de mapa, aparelho, serial, data/hora e software), calcula um score de risco e gera relatório em Markdown/JSON. O modo `--strip` cria cópias sem metadados e nunca altera os originais. Tem testes (pytest) e CI próprio.
+
+```bash
+cd exif-guard && pip install -e ".[dev]"
+exif-guard pasta_das_fotos
+exif-guard pasta_das_fotos --strip --out pasta_limpa
+```
+
+Documentação completa, aviso legal e checklist de privacidade no [README da pasta](exif-guard/README.md). Use apenas em arquivos próprios ou com autorização expressa.
 
 ## Uso ético
 
